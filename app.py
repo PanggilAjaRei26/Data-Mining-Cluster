@@ -3,21 +3,22 @@ import pandas as pd
 from sklearn.cluster import KMeans
 import streamlit as st
 import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
-import matplotlib.transforms as tf
 import seaborn as sns
 
 st.title("Clustering Besaran PB vs PIC dengan KMeans")
 
-df = pd.read_csv('dataset.csv')
+@st.cache
+def load_data():
+    df = pd.read_csv('dataset.csv')
+    return df
 
-df.head()
+df = load_data()
+
+st.write(df.head())
 
 X = df.drop(['TOKO', 'NAMA', 'BACKUP', 'URUT', 'JARAK (KM)', 'NOPIC', 'TGLPICK', 'DOL', 'KLIK', 'ZN', 'NOSJ', 'NOPB', 'CNT', 'BRJ'], axis=1)
 
-print(X)
-
-X.info()
+st.write(X)
 
 clusters = []
 for i in range(1, 10):
@@ -30,13 +31,13 @@ plt.xlabel('Clusters')
 plt.ylabel('Inertia')
 plt.title('Elbow Method')
 
-plt.show()
+st.pyplot(fig)
 
 n_clust = 4
 kmean = KMeans(n_clusters=n_clust).fit(X)
 X['LABELS'] = kmean.labels_
 
-plt.figure(figsize=(10, 8))
+fig = plt.figure(figsize=(10, 8))
 plt.scatter(X['PB'], X['PIC'], c=X['LABELS'], marker='o', s=50, cmap='tab10')
 
 for label in X['LABELS'].unique():
@@ -52,6 +53,7 @@ plt.xlabel('PB')
 plt.ylabel('PIC')
 plt.title('Cluster Visualization')
 plt.colorbar(ticks=range(n_clust))
-plt.show()
 
-print(X)
+st.pyplot(fig)
+
+st.write(X)
