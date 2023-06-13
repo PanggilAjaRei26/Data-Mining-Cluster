@@ -67,5 +67,8 @@ prediction_button = st.button("Prediksi")
 
 if prediction_button:
     new_data = pd.DataFrame({'PB': [pb_input], 'PIC': [pic_input]})
-    prediction = kmean.predict(new_data)[0]
-    st.write(f"Data dengan PB={pb_input} dan PIC={pic_input} diprediksi masuk ke cluster {prediction}")
+    if len(new_data.columns) == len(X.columns):
+        prediction = kmean.predict(new_data)[0]
+        st.write(f"Data dengan PB={pb_input} dan PIC={pic_input} diprediksi masuk ke cluster {prediction}")
+    else:
+        st.write("Dimensi data yang diberikan tidak sesuai dengan data pelatihan.")
