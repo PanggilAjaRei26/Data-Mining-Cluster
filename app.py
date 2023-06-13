@@ -7,24 +7,29 @@ import matplotlib.transforms as tf
 
 st.title("Clustering Besaran PB vs PIC dengan KMeans")
 
-model = pickle.load(open('cluster.sav', 'rb'))
+def main():
+    st.title('Aplikasi Data Mining')
+    
+    # Menambahkan elemen teks
+    st.header('Ini adalah header')
+    st.subheader('Ini adalah subheader')
+    st.write('Ini adalah teks biasa')
+    
+    # Menambahkan elemen gambar
+    st.image('gambar.png', caption='Ini adalah gambar', use_column_width=True)
+    
+    # Menambahkan elemen plot
+    data = [1, 2, 3, 4, 5]
+    st.line_chart(data)
+    
+    # Menambahkan elemen interaktif
+    name = st.text_input('Masukkan nama Anda')
+    st.write('Halo,', name, '!')
+    
+    # Menambahkan elemen lainnya
+    option = st.selectbox('Pilih opsi', ['A', 'B', 'C'])
+    st.write('Anda memilih opsi', option)
+    
+if __name__ == '__main__':
+    main()
 
-df = pd.read_csv("dataset.csv")
-df['PB'] = pd.to_datetime(df['PIC'])
-df.set_index(['PB'], inplace=True)
-
-st.title('Prediksi Cluster')
-year = st.slider("Tentukan Tahun",1,5, step=1)
-
-pred = model.forecast(year)
-pred = pd.DataFrame(pred, index=pd.date_range(start=df.index[-1], periods=year, freq='Y'), columns=['PB'])
-
-if st.button("Prediksi"):
-    col1, col2 = st.columns([2,3])
-    with col1:
-        st.dataframe(pred)
-    with col2:
-        fig, ax = plt.subplots()
-        df['PB'].plot(style="--", color='gray', legend=True, label='known')
-        pred['PB'].plot(color='b', legend=True, label='Prediction')
-        st.pyplot(fig)
