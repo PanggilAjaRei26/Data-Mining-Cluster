@@ -57,3 +57,15 @@ plt.colorbar(ticks=range(n_clust))
 st.pyplot(fig)
 
 st.write(X)
+
+# Tombol Prediksi
+st.subheader("Prediksi Cluster")
+
+pb_input = st.number_input("Masukkan nilai PB:")
+pic_input = st.number_input("Masukkan nilai PIC:")
+prediction_button = st.button("Prediksi")
+
+if prediction_button:
+    new_data = pd.DataFrame({'PB': [pb_input], 'PIC': [pic_input]})
+    prediction = kmean.predict(new_data)[0]
+    st.write(f"Data dengan PB={pb_input} dan PIC={pic_input} diprediksi masuk ke cluster {prediction}")
